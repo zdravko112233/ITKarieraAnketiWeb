@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <title>Login Window</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 800px;
+      height: 450px;
+      border: 1px solid #ccc;
+      padding: 20px;
+    }
+
+    .title {
+      font-size: 50px;
+      margin-bottom: 20px;
+    }
+
+    .input-field {
+      margin-bottom: 10px;
+    }
+
+    .button {
+      width: 250px;
+      height: 50px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Login</h1>
+    <div class="input-field">
+      <input type="text" id="textLoginName" placeholder="Name" width="250">
+    </div>
+    <div class="input-field">
+      <input type="password" id="textLoginPassword" placeholder="Password" width="250">
+    </div>
+    <button id="buttonLogin" class="button">Login</button>
+  </div>
+</body>
+</html>

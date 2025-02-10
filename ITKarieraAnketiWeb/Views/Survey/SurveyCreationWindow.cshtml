@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Survey Creation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #f0f0f0;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .question-section {
+            margin-bottom: 20px;
+        }
+
+        .answer-section {
+            margin-bottom: 10px;
+        }
+
+        .button {
+            margin-right: 10px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50; /* Green */
+            color: white;
+            cursor: pointer;
+        }
+
+            .button:hover {
+                background-color: #45a049; /* Darker green */
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button id="BackButton" class="button">Back</button>
+            <label id="QuestionNumberLabel"></label>
+            <button id="NextButton" class="button">Next</button>
+        </div>
+        <div class="content">
+            <div class="question-section">
+                <label>Question Title:</label>
+                <input type="text" id="questionTitleTextBox" width="776">
+            </div>
+            <div class="question-section">
+                <label>Answers:</label>
+                <div class="answer-section" id="answersPanel">
+                    <input type="text" id="answer1TextBox" width="776">
+                    <input type="text" id="answer2TextBox" width="776">
+                </div>
+                <button id="AddAnswerButton" class="button">Add More Answers</button>
+                <button id="RemoveAnswerButton" class="button">Remove Answers</button>
+                <button id="SaveButton" class="button">Save and Exit</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // JavaScript code for adding/removing answers and handling button clicks
+        // ... (You'll need to add this code)
+    </script>
+</body>
+</html>
