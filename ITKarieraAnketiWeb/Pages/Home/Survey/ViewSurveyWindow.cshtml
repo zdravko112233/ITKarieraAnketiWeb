@@ -1,7 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@page
+@model ITKarieraAnketiWeb.Pages.Home.Survey.ViewSurveyWindowModel
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Survey Creation</title>
+    <title>View Survey</title>
     <style>
         body {
             margin: 0;
@@ -52,29 +54,15 @@
 <body>
     <div class="container">
         <div class="header">
-            <button id="BackButton" class="button">Back</button>
-            <label id="QuestionNumberLabel"></label>
-            <button id="NextButton" class="button">Next</button>
+            <label id="SurveyNameLabel"></label>
+            <button id="GoBackToLandingPage" class="button">Go Back</button>
         </div>
         <div class="content">
-            <div class="question-section">
-                <label>Question Title:</label>
-                <input type="text" id="questionTitleTextBox" width="776">
-            </div>
-            <div class="question-section">
-                <label>Answers:</label>
-                <div class="answer-section" id="answersPanel">
-                    <input type="text" id="answer1TextBox" width="776">
-                    <input type="text" id="answer2TextBox" width="776">
-                </div>
-                <button id="AddAnswerButton" class="button">Add More Answers</button>
-                <button id="RemoveAnswerButton" class="button">Remove Answers</button>
-                <button id="SaveButton" class="button">Save and Exit</button>
-            </div>
+            <div id="QuestionsPanel"></div>
         </div>
     </div>
     <script>
-        // JavaScript code for adding/removing answers and handling button clicks
+        // JavaScript code for dynamically adding questions and answers
         // ... (You'll need to add this code)
     </script>
 </body>
