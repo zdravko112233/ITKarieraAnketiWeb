@@ -5,41 +5,34 @@
 <head>
   <title>Register Window</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+        .container {
+            width: 800px;
+            height: 450px;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+        }
 
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 800px;
-      height: 450px;
-      border: 1px solid #ccc;
-      padding: 20px;
-    }
+        .title {
+            font-size: 50px;
+            margin: 40px;
+        }
 
-    .title {
-      font-size: 50px;
-      margin-bottom: 20px;
-    }
+        .input-field {
+            margin: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    .input-field {
-      margin-bottom: 10px;
-    }
-
-    .button {
-      width: 250px;
-      height: 50px;
-      font-size: 20px;
-      cursor: pointer;
-    }
+        .button {
+            width: 250px;
+            height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
   </style>
 </head>
 <body>
@@ -51,7 +44,9 @@
     <div class="input-field">
       <input type="password" id="textRegisterPassword" placeholder="Password" width="250">
     </div>
+    <form method="post" asp-action="Register">
     <button id="buttonCreateAccount" class="button">Create Account</button>
+    </form>
   </div>
 </body>
 </html>
