@@ -39,19 +39,18 @@
             <div class="center welcome">
                 Welcome
             </div>
-            <div></div>
+            <br>
             <div class="center">
-                <form method="post" action="@Url.Action("Register", "Account")">
+                <form method="get" action="/Home/RegisterWindow">
                     <button type="submit" class="btn-custom">Register</button>
                 </form>
             </div>          
             <div class="center">
-                <form method="post" action="@Url.Action("Login", "Account")">
+                <form method="get" action="/Home/LoginWindow">
                     <button type="submit" class="btn-custom">Login</button>
                 </form>
             </div>
-            <div></div>
-            <div></div>
+            <br>
         </div>
     </div>
 </body>
