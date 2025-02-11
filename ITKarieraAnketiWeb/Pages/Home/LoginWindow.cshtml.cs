@@ -7,6 +7,7 @@ namespace ITKarieraAnketiWeb.Pages.Home
     {
         public void OnGet()
         {
+
         }
     }
 }
