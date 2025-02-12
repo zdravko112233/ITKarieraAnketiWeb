@@ -1,5 +1,4 @@
-﻿@page
-@model ITKarieraAnketiWeb.Pages.Home.RegisterWindowModel
+﻿@model ITKarieraAnketiWeb.Models.RegisterViewModel
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,19 +36,20 @@
   </style>
 </head>
 <body>
-  <div class="containerinfo">
-    <h1 class="title">Register</h1>
-        <form method="post" asp-controller="User" asp-action="Register">
-      <div class="input-field">
-        <input type="text" id="textLoginName" name="Username" placeholder="Name" width="250">
-      </div>
-      <div class="input-field">
-        <input type="password" id="textLoginPassword" name="Password" placeholder="Password" width="250">
-      </div>
-      <div class="input-field">
-        <button id="buttonRegister" class="button">Register</button>
-      </div>
-    </form>
-  </div>
+    <div class="containerinfo">
+        <h1 class="title">Register</h1>
+        <form method="post" asp-controller="Home" asp-action="Register">
+            @Html.AntiForgeryToken()
+            <div class="input-field">
+                <input type="text" asp-for="Username" placeholder="Name">
+            </div>
+            <div class="input-field">
+                <input type="password" asp-for="Password" placeholder="Password">
+            </div>
+            <div class="input-field">
+                <button type="submit" class="button">Register</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>

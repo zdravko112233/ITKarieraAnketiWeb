@@ -1,5 +1,4 @@
-﻿@page
-@model ITKarieraAnketiWeb.Pages.Home.LoginWindowModel
+﻿@model ITKarieraAnketiWeb.Models.LoginViewModel
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,19 +35,20 @@
   </style>
 </head>
 <body>
-  <div class="containerinfo">
-    <h1 class="title">Login</h1>
-        <form method="post" asp-controller="User" asp-action="Login">
+    <div class="containerinfo">
+        <h1 class="title">Login</h1>
+        <form method="post" asp-controller="Home" asp-action="Login">
+            @Html.AntiForgeryToken()
             <div class="input-field">
-                <input type="text" id="textLoginName" name="Username" placeholder="Name" width="250">
+                <input type="text" asp-for="Username" placeholder="Name">
             </div>
             <div class="input-field">
-                <input type="password" id="textLoginPassword" name="Password" placeholder="Password" width="250">
+                <input type="password" asp-for="Password" placeholder="Password">
             </div>
             <div class="input-field">
-                <button id="buttonLogin" class="button">Login</button>
+                <button type="submit" class="button">Login</button>
             </div>
-    </form>
-  </div>
+        </form>
+    </div>
 </body>
 </html>
