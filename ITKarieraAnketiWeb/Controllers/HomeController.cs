@@ -17,6 +17,14 @@ namespace ITKarieraAnketiWeb.Controllers
         {
             return View();
         }
+        public IActionResult Register()
+        {
+            return View(); // Sq trqbva da se svurje s bazata
+        }
+        public IActionResult Login()
+        {
+            return View(); // Kakto i tva i e ok
+        }
 
         public IActionResult Privacy()
         {
