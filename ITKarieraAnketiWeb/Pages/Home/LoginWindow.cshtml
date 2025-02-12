@@ -5,7 +5,7 @@
 <head>
   <title>Login Window</title>
   <style>
-    .container {
+    .containerinfo {
       width: 800px;
       height: 450px;
       margin: 0 auto;
@@ -15,6 +15,9 @@
     .title {
       font-size: 50px;
       margin: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .input-field {
@@ -29,23 +32,22 @@
       height: 50px;
       font-size: 20px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="containerinfo">
     <h1 class="title">Login</h1>
-        <div class="input-field">
-      <input type="text" id="textLoginName" placeholder="Name" width="250">
-        </div>
-    <div class="input-field">
-      <input type="password" id="textLoginPassword" placeholder="Password" width="250">
-    </div>
-    <form method="post" asp-action="Login">
-    <button id="buttonLogin" class="button">Login</button>
+        <form method="post" asp-controller="User" asp-action="Login">
+            <div class="input-field">
+                <input type="text" id="textLoginName" name="Username" placeholder="Name" width="250">
+            </div>
+            <div class="input-field">
+                <input type="password" id="textLoginPassword" name="Password" placeholder="Password" width="250">
+            </div>
+            <div class="input-field">
+                <button id="buttonLogin" class="button">Login</button>
+            </div>
     </form>
   </div>
 </body>
