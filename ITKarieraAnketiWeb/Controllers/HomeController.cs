@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+
 
 namespace ITKarieraAnketiWeb.Controllers
 {
@@ -45,6 +48,7 @@ namespace ITKarieraAnketiWeb.Controllers
                 if (await _context.Users.AnyAsync(u => u.Username == model.Username))
                 {
                     ModelState.AddModelError("Username", "Username already exists");
+                    return View("Register", model);
                 }
 
                 // Hash password

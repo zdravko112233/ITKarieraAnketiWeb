@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Linq;
 using ITKarieraAnketiWeb.Database;
-using ITKarieraAnketiWeb.Entities;
 using Microsoft.EntityFrameworkCore;
 using ITKarieraAnketiWeb.Database;
+using ITKarieraAnketiWeb.Models; 
 
-namespace ITKarieraAnketiWeb.Repository
+public class UserRepository
 {
-    public class UserRepository
+    private readonly AppDbContext _context; 
+    public UserRepository(AppDbContext context)
     {
-        private readonly DbContext _context;
-        public UserRepository(DbContext context)
-        {
-            _context = context;
-        }
-        public void AddUser(User user)
-        {
-            _context.Add(user);
-            _context.SaveChanges();
-        }
+        _context = context;
+    }
+
+    public async Task AddUserAsync(User user)
+    {
+        await _context.Users.AddAsync(user);
+        await _context.SaveChangesAsync();
     }
 }
