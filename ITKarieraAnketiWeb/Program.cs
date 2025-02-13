@@ -41,6 +41,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}"); 
 
-app.MapGet("/", () => Results.Redirect("/Home/Register"));
+app.MapGet("/", () => Results.Redirect("/Home/Index"));
 
 app.Run();
