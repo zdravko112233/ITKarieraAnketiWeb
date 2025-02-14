@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Register Window</title>
-  <style>
+    <title>Register Window</title>
+    <style>
         .containerinfo {
             width: 800px;
             height: 450px;
@@ -33,7 +33,7 @@
             font-size: 20px;
             cursor: pointer;
         }
-  </style>
+    </style>
 </head>
 <body>
     <div class="containerinfo">
@@ -42,9 +42,11 @@
             @Html.AntiForgeryToken()
             <div class="input-field">
                 <input type="text" asp-for="Username" placeholder="Name">
+                <span asp-validation-for="Username" class="text-danger"></span>
             </div>
             <div class="input-field">
                 <input type="password" asp-for="Password" placeholder="Password">
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="input-field">
                 <button type="submit" class="button">Register</button>
@@ -54,5 +56,10 @@
             <button type="submit">Go Back</button>
         </form>
     </div>
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
 </body>
 </html>

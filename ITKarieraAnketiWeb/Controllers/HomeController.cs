@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using ITKarieraAnketiWeb.Models;
-using ITKarieraAnketiWeb.Models.Authentication;
 using ITKarieraAnketiWeb.Database;
 using ITKarieraAnketiWeb.Security;
 using Microsoft.AspNetCore.Mvc;
@@ -34,16 +33,15 @@ namespace ITKarieraAnketiWeb.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            return View();
+            return View(new RegisterViewModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(Models.RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            if (!ModelState.IsValid) return View("Register", model);
-
             try
             {
+
                 // Check if username exists
                 if (await _context.Users.AnyAsync(u => u.Username == model.Username))
                 {
@@ -83,21 +81,19 @@ namespace ITKarieraAnketiWeb.Controllers
             {
                 _logger.LogError(ex, "Registration failed");
                 ModelState.AddModelError("", "An error occurred during registration");
-                return View("Login", model);
+                return View(model);
             }
         }
 
         [HttpGet]
         public IActionResult Login()
         {
-            return View();
+            return View(new LoginViewModel());
         }
 
         [HttpPost]
         public async Task<IActionResult> Login(Models.LoginViewModel model)
         {
-            if (!ModelState.IsValid) return View("Login", model);
-
             try
             {
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
@@ -123,7 +119,7 @@ namespace ITKarieraAnketiWeb.Controllers
             {
                 _logger.LogError(ex, "Login failed");
                 ModelState.AddModelError("", "An error occurred during login");
-                return View("Login", model);
+                return View(model);
             }
         }
 
