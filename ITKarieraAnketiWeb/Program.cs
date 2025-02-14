@@ -5,12 +5,20 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddControllersWithViews();        
+builder.Services.AddControllersWithViews();
 
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
-
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("Default"),
+        new MySqlServerVersion(new Version(5, 5, 62)),
+        mysqlOptions => {
+        mysqlOptions.EnableRetryOnFailure();
+        mysqlOptions.CommandTimeout(60);
+        }
+    )
+);
+builder.Services.AddScoped<UserRepository>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options => {
@@ -41,6 +49,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}"); 
 
-app.MapGet("/", () => Results.Redirect("/Home/Register"));
+app.MapGet("/", () => Results.Redirect("/Home/Index"));
 
 app.Run();
