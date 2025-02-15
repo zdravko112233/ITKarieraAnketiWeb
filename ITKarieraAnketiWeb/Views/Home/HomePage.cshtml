@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Landing Page Window</title>
+    <title>Main Menu</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -60,11 +60,11 @@
         <div class="options-bar">
             <div class="menu-item">
                 <span>Account</span>
-                <br />
+                <br/>
                 <h1>Welcome, @User.Identity.Name!</h1>
             </div>
             <div class="menu-item">
-                <form method="get" asp-controller="Survey" asp-action="SurveyCreator">
+                <form method="get" action="../Survey/SurveyCreator">
                     <button type="submit" class="btn btn-primary">Create Survey</button>
                 </form>
             </div>
