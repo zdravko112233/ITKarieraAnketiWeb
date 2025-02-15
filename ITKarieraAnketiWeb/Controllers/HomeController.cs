@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using ITKarieraAnketiWeb.Models.ViewModels;
 
 
 namespace ITKarieraAnketiWeb.Controllers
@@ -126,7 +126,7 @@ namespace ITKarieraAnketiWeb.Controllers
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 await HttpContext.SignInAsync(new ClaimsPrincipal(identity));
 
-                return RedirectToAction("LandingPageWindow");
+                return RedirectToAction("HomePage");
             }
             catch (Exception ex)
             {
@@ -137,18 +137,19 @@ namespace ITKarieraAnketiWeb.Controllers
         }
 
         [Authorize]
-        public IActionResult LandingPageWindow()
+        public IActionResult HomePage()
         {
-            return View();
+            return View(new HomePageViewModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Logout(HomePageViewModel model)
         {
+            if (!ModelState.IsValid) { return View(model); }
+
             await HttpContext.SignOutAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("/Home/Index");
         }
     }
-
 }
 
