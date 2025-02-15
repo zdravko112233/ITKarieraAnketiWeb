@@ -2,7 +2,6 @@
 using System.Linq;
 using ITKarieraAnketiWeb.Database;
 using Microsoft.EntityFrameworkCore;
-using ITKarieraAnketiWeb.Database;
 using ITKarieraAnketiWeb.Models; 
 
 public class UserRepository
