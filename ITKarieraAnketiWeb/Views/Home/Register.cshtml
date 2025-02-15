@@ -1,4 +1,4 @@
-﻿@model ITKarieraAnketiWeb.Models.RegisterViewModel
+﻿@model ITKarieraAnketiWeb.Models.LoginViewModel
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,20 +38,17 @@
 <body>
     <div class="containerinfo">
         <h1 class="title">Register</h1>
-        <form method="post" asp-controller="Home" asp-action="Register">
-            @Html.AntiForgeryToken()
+        @using (Html.BeginForm("Register", "Home", FormMethod.Post))
+        {
             <div class="input-field">
-                <input type="text" asp-for="Username" placeholder="Name">
-                <span asp-validation-for="Username" class="text-danger"></span>
+                @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control form-control-user", placeholder = "Username" } })
             </div>
             <div class="input-field">
-                <input type="password" asp-for="Password" placeholder="Password">
-                <span asp-validation-for="Password" class="text-danger"></span>
+                @Html.PasswordFor(model => model.Password, new { @class = "form-control form-control-user", placeholder = "Password" })
             </div>
-            <div class="input-field">
-                <button type="submit" class="button">Register</button>
-            </div>
-        </form>
+            <input type="submit" value="Register" class="button input-field" />
+            <hr>
+        }
         <form method="get" action="/Home/Index">
             <button type="submit">Go Back</button>
         </form>
