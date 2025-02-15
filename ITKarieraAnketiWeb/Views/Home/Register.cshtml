@@ -41,12 +41,14 @@
         @using (Html.BeginForm("Register", "Home", FormMethod.Post))
         {
             <div class="input-field">
-                @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control form-control-user", placeholder = "Username" } })
+                @Html.EditorFor(model => model.Username, new { placeholder = "Username" })
             </div>
             <div class="input-field">
-                @Html.PasswordFor(model => model.Password, new { @class = "form-control form-control-user", placeholder = "Password" })
+                @Html.PasswordFor(model => model.Password, new{ placeholder = "Password" })
             </div>
-            <input type="submit" value="Register" class="button input-field" />
+            <div class="input-field">
+            <input type="submit" value="Register" class="button"/>
+            </div>
             <hr>
         }
         <form method="get" action="/Home/Index">
