@@ -41,7 +41,7 @@
         @using (Html.BeginForm("Register", "Home", FormMethod.Post))
         {
             <div class="input-field">
-                @Html.EditorFor(model => model.Username, new { placeholder = "Username" })
+                @Html.EditorFor(model => model.Username, new { htmlAttributes = new { placeholder = "Username" } })
             </div>
             <div class="input-field">
                 @Html.PasswordFor(model => model.Password, new{ placeholder = "Password" })
