@@ -73,11 +73,12 @@ namespace ITKarieraAnketiWeb.Controllers
 
                 // Sign in user immediately after registration
                 var claims = new List<Claim>
-            {
+                {
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
-            };
+                };
 
+                // Sign in user with cookie authentication
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 await HttpContext.SignInAsync(new ClaimsPrincipal(identity));
 
@@ -108,19 +109,20 @@ namespace ITKarieraAnketiWeb.Controllers
             try
             {
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
-                if (user == null || !Hasher.VerifyPassword(model.Password, user.PasswordHash, user.Salt)) //Hasher does not work for some reason
+                if (user == null || !Hasher.VerifyPassword(model.Password, user.PasswordHash, user.Salt))
                 {
                     ModelState.AddModelError("", "Invalid username or password");
                     return View("Login", model);
                 }
 
-               
-                var claims = new List<Claim>
-            {
+               // Create claims for user
+                var claims = new List<Claim> 
+                {
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
-            };
+                };
 
+                // Sign in user with cookie authentication
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 await HttpContext.SignInAsync(new ClaimsPrincipal(identity));
 

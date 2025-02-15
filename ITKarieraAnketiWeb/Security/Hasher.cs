@@ -36,7 +36,11 @@ namespace ITKarieraAnketiWeb.Security
 
         public static bool VerifyPassword(string password, byte[] storedHash, byte[] storedSalt)
         {
+            // Compute hash from password and stored salt
             byte[] computedHash = HashPassword(password, storedSalt);
+            _logger.LogInformation("Computed hash: {Hash}", Convert.ToBase64String(computedHash));
+
+            // Compare computed hash with stored hash
             bool isValid = CryptographicOperations.FixedTimeEquals(computedHash, storedHash);
             _logger.LogInformation("Password verification result: {IsValid}", isValid);
             return isValid;
