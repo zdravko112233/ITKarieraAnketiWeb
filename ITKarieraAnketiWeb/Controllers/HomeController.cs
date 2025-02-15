@@ -33,12 +33,18 @@ namespace ITKarieraAnketiWeb.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            return View(new RegisterViewModel());
+            return View(new LoginViewModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(LoginViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state");
+                return View(model);
+            }
+
             try
             {
 
@@ -92,12 +98,17 @@ namespace ITKarieraAnketiWeb.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(Models.LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state");
+                return View(model);
+            }
             try
             {
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
-                if (user == null || !Hasher.VerifyPassword(model.Password, user.PasswordHash, user.Salt))
+                if (user == null || !Hasher.VerifyPassword(model.Password, user.PasswordHash, user.Salt)) //Hasher does not work for some reason
                 {
                     ModelState.AddModelError("", "Invalid username or password");
                     return View("Login", model);
