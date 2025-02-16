@@ -16,5 +16,20 @@ namespace ITKarieraAnketiWeb.Database
         {
 
         }
-    }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Survey>()
+                .HasMany(s => s.Questions)
+                .WithOne(q => q.Survey)
+                .HasForeignKey(q => q.SurveyId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Question>()
+                .HasMany(q => q.Options)
+                .WithOne(o => o.Question)
+                .HasForeignKey(o => o.QuestionId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
+    }   
+
 }
