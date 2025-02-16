@@ -41,7 +41,7 @@
             </div>
 
             <div class="card-body">
-                <form asp-action="SurveyCreator" method="post" id="surveyForm">
+                <form asp-controller="Survey" asp-action="SurveyCreator" method="post" id="surveyForm">
                     <!-- Survey Metadata -->
                     <div class="form-group">
                         <label asp-for="Title">Survey Title</label>
