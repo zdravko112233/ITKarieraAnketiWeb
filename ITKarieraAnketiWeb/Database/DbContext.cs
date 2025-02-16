@@ -16,6 +16,7 @@ namespace ITKarieraAnketiWeb.Database
         {
 
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Survey>()
@@ -29,7 +30,14 @@ namespace ITKarieraAnketiWeb.Database
                 .WithOne(o => o.Question)
                 .HasForeignKey(o => o.QuestionId)
                 .OnDelete(DeleteBehavior.Cascade);
-        }
-    }   
 
+            modelBuilder.Entity<Question>()
+                .Property(q => q.OrderNumber)
+                .IsRequired();
+
+            modelBuilder.Entity<Option>()
+                .Property(o => o.OrderNumber)
+                .IsRequired();
+        }
+    }
 }

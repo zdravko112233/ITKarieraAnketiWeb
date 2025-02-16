@@ -35,11 +35,12 @@ namespace ITKarieraAnketiWeb.Controllers
                 }
             });
         }
+
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> SurveyCreator(SurveyCreatorViewModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 model.Questions ??= new List<QuestionViewModel>();
                 foreach (var q in model.Questions) q.Options ??= new List<string>();
@@ -65,7 +66,7 @@ namespace ITKarieraAnketiWeb.Controllers
 
                 // Check if User ID is not a valid GUID
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                if (!Guid.TryParse(userId, out Guid userGuid)) 
+                if (!Guid.TryParse(userId, out Guid userGuid))
                     return Unauthorized();
 
                 var survey = new Survey
@@ -74,7 +75,10 @@ namespace ITKarieraAnketiWeb.Controllers
                     Title = model.Title,
                     Description = model.Description,
                     CreatedAt = DateTime.UtcNow,
-                    UserId = userGuid
+                    UserId = userGuid,
+                    ExpiresAt = DateTime.UtcNow + TimeSpan.FromDays(30),
+                    User = _context.Users.Find(userGuid),
+                    Responses = new List<Response>()
                 };
 
                 // Create questions and options
@@ -88,7 +92,10 @@ namespace ITKarieraAnketiWeb.Controllers
                             QuestionText = q.QuestionText,
                             QuestionType = q.QuestionType,
                             OrderNumber = index + 1,
-                            SurveyId = survey.SurveyId // Now survey is initialized
+                            SurveyId = survey.SurveyId, // Now survey is initialized
+                            Survey = survey,
+                            Options = new List<Option>(),
+                            Answers = new List<Answer>()
                         };
 
                         if (q.QuestionType == "MultipleChoice")
@@ -100,7 +107,8 @@ namespace ITKarieraAnketiWeb.Controllers
                                     OptionId = Guid.NewGuid(),
                                     OptionText = o,
                                     OrderNumber = oIndex + 1,
-                                    QuestionId = question.QuestionId // Now question is initialized
+                                    QuestionId = question.QuestionId, // Now question is initialized
+                                    Question = question
                                 }).ToList();
                         }
 
@@ -120,12 +128,13 @@ namespace ITKarieraAnketiWeb.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error creating survey");
+                _logger.LogError(ex, "Error creating survey: {Message}", ex.Message);
                 ModelState.AddModelError("", "An error occurred while saving the survey");
                 model.Questions ??= new List<QuestionViewModel>();
                 return View(model);
             }
         }
+
         public IActionResult SurveyCreated(Guid id)
         {
             var survey = _context.Surveys
@@ -134,6 +143,5 @@ namespace ITKarieraAnketiWeb.Controllers
 
             return View(survey);
         }
-
     }
 }
