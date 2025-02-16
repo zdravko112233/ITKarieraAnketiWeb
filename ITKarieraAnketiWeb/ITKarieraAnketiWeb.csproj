@@ -8,9 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="Entities\**" />
+    <Compile Remove="Pages\**" />
     <Content Remove="Entities\**" />
+    <Content Remove="Pages\**" />
     <EmbeddedResource Remove="Entities\**" />
+    <EmbeddedResource Remove="Pages\**" />
     <None Remove="Entities\**" />
+    <None Remove="Pages\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,7 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Home\" />
     <Folder Include="Services\" />
   </ItemGroup>
 

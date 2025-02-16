@@ -39,11 +39,14 @@ namespace ITKarieraAnketiWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> SurveyCreator(SurveyCreatorViewModel model)
         {
+            if(!ModelState.IsValid)
+            {
+                model.Questions ??= new List<QuestionViewModel>();
+                foreach (var q in model.Questions) q.Options ??= new List<string>();
+                return View(model);
+            }
             try
             {
-                ModelState.Clear();
-                TryValidateModel(model);
-
                 foreach (var question in model.Questions)
                 {
                     if (question.QuestionType == "MultipleChoice" &&
@@ -60,8 +63,9 @@ namespace ITKarieraAnketiWeb.Controllers
                     return View(model);
                 }
 
+                // Check if User ID is not a valid GUID
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                if (!Guid.TryParse(userId, out Guid userGuid))
+                if (!Guid.TryParse(userId, out Guid userGuid)) 
                     return Unauthorized();
 
                 var survey = new Survey

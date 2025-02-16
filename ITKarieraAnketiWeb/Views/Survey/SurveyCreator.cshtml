@@ -15,6 +15,7 @@
         .options-section, .text-answer-section {
             margin-top: 1rem;
             padding-left: 1.5rem;
+        }
 
         .container {
             display: flex;
@@ -47,18 +48,18 @@
             </div>
 
             <div class="card-body">
-                <form asp-controller="Survey" asp-action="SurveyCreator" method="post" id="surveyForm">
+                @using (Html.BeginForm("SurveyCreator", "Survey", FormMethod.Post, new { id = "surveyForm" }))
+                {
                     <!-- Survey Metadata -->
                     <div class="form-group">
                         <label asp-for="Title">Survey Title</label>
-                        <input asp-for="Title" class="form-control" placeholder="Enter survey title">
+                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter survey title" } })
                         <span asp-validation-for="Title" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
                         <label asp-for="Description">Description</label>
-                        <textarea asp-for="Description" class="form-control" rows="3"
-                                  placeholder="Optional survey description"></textarea>
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = 3, placeholder = "Optional survey description" })
                     </div>
 
                     <!-- Questions Container -->
@@ -73,28 +74,21 @@
 
                                 <div class="form-group">
                                     <label>Question Text</label>
-                                    <input asp-for="Questions[i].QuestionText" class="form-control"
-                                           placeholder="Enter question text">
+                                    @Html.EditorFor(model => model.Questions[i].QuestionText, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter question text" } })
                                     <span asp-validation-for="Questions[i].QuestionText" class="text-danger"></span>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Question Type</label>
-                                    <select asp-for="Questions[i].QuestionType" class="form-control question-type">
-                                        <option value="MultipleChoice">Multiple Choice</option>
-                                        <option value="Text">Text Answer</option>
-                                    </select>
+                                    @Html.DropDownListFor(model => model.Questions[i].QuestionType, new SelectList(new[] { "MultipleChoice", "Text" }), new { @class = "form-control question-type" })
                                 </div>
 
                                 <!-- Multiple Choice Options -->
-                                <div class="options-section"
-                                     style="@(Model.Questions[i].QuestionType == "MultipleChoice" ? "" : "display:none;")">
+                                <div class="options-section" style="@(Model.Questions[i].QuestionType == "MultipleChoice" ? "" : "display:none;")">
                                     @for (int j = 0; j < Model.Questions[i].Options.Count; j++)
                                     {
                                         <div class="option-input-group">
-                                            <input asp-for="Questions[i].Options[j]"
-                                                   class="form-control"
-                                                   placeholder="Option @(j + 1)">
+                                            @Html.EditorFor(model => model.Questions[i].Options[j], new { htmlAttributes = new { @class = "form-control", placeholder = $"Option {j + 1}" } })
                                             @if (j >= 2)
                                             {
                                                 <button type="button" class="btn btn-danger btn-sm remove-option">×</button>
@@ -106,12 +100,10 @@
 
                                 <!-- This is CORRECT behavior (preview only) -->
                                 <div class="text-answer-section" style="display: none;">
-                                    <textarea class="form-control" rows="3"
-                                              placeholder="Respondents will see this text box"
-                                              disabled></textarea>
+                                    <textarea class="form-control" rows="3" placeholder="Respondents will see this text box" disabled></textarea>
                                 </div>
 
-                                <input type="hidden" asp-for="Questions[i].OrderNumber" value="@(i + 1)">
+                                @Html.HiddenFor(model => model.Questions[i].OrderNumber, new { value = i + 1 })
                             </div>
                         }
                     </div>
@@ -125,7 +117,7 @@
                             <i class="fas fa-save"></i> Save Survey
                         </button>
                     </div>
-                </form>
+                }
             </div>
         </div>
     </div>
@@ -151,15 +143,12 @@
 
                         <div class="form-group">
                             <label>Question Text</label>
-                            <input name="Questions[${index}].QuestionText"
-                                   class="form-control"
-                                   placeholder="Enter question text">
+                            <input name="Questions[${index}].QuestionText" class="form-control" placeholder="Enter question text">
                         </div>
 
                         <div class="form-group">
                             <label>Question Type</label>
-                            <select name="Questions[${index}].QuestionType"
-                                    class="form-control question-type">
+                            <select name="Questions[${index}].QuestionType" class="form-control question-type">
                                 <option value="MultipleChoice">Multiple Choice</option>
                                 <option value="Text">Text Answer</option>
                             </select>
@@ -167,22 +156,16 @@
 
                         <div class="options-section" style="display: none;">
                             <div class="option-input-group">
-                                <input name="Questions[${index}].Options[0]"
-                                       class="form-control"
-                                       placeholder="Option 1">
+                                <input name="Questions[${index}].Options[0]" class="form-control" placeholder="Option 1">
                             </div>
                             <div class="option-input-group">
-                                <input name="Questions[${index}].Options[1]"
-                                       class="form-control"
-                                       placeholder="Option 2">
+                                <input name="Questions[${index}].Options[1]" class="form-control" placeholder="Option 2">
                             </div>
                             <button type="button" class="btn btn-primary btn-sm add-option">Add Option</button>
                         </div>
 
                         <div class="text-answer-section" style="display: none;">
-                            <textarea class="form-control" rows="3"
-                                      placeholder="Text answer input (preview)"
-                                      disabled></textarea>
+                            <textarea class="form-control" rows="3" placeholder="Text answer input (preview)" disabled></textarea>
                         </div>
 
                         <input type="hidden" name="Questions[${index}].OrderNumber" value="${index + 1}">
@@ -216,9 +199,7 @@
 
                 const template = `
                     <div class="option-input-group">
-                        <input name="Questions[${questionIndex}].Options[${optionIndex}]"
-                               class="form-control"
-                               placeholder="Option ${optionIndex + 1}">
+                        <input name="Questions[${questionIndex}].Options[${optionIndex}]" class="form-control" placeholder="Option ${optionIndex + 1}">
                         <button type="button" class="btn btn-danger btn-sm remove-option">×</button>
                     </div>`;
 
