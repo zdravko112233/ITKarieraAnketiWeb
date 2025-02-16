@@ -3,80 +3,245 @@
 <html>
 <head>
     <title>Survey Creation</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background-color: #f0f0f0;
-        }
-
-        .content {
-            padding: 20px;
-        }
-
         .question-section {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
         }
 
-        .answer-section {
-            margin-bottom: 10px;
+        .options-section, .text-answer-section {
+            margin-top: 1rem;
+            padding-left: 1.5rem;
         }
 
-        .button {
-            margin-right: 10px;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            background-color: #4CAF50; /* Green */
-            color: white;
-            cursor: pointer;
+        .option-input-group {
+            position: relative;
+            margin-bottom: 0.5rem;
         }
 
-            .button:hover {
-                background-color: #33a049; /* Darker green */
-            }
+        .remove-option {
+            position: absolute;
+            right: -35px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <button id="BackButton" class="button">Back</button>
-            <label id="QuestionNumberLabel"></label>
-            <button id="NextButton" class="button">Next</button>
-        </div>
-        <div class="content">
-            <div class="question-section">
-                <label>Question Title:</label>
-                <input type="text" id="questionTitleTextBox" width="776">
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="card shadow">
+            <!-- Fixed Back Button -->
+            <div class="card-header">
+                <a asp-controller="Home" asp-action="HomePage" class="btn btn-secondary">
+                    ← Back to Home
+                </a>
             </div>
-            <div class="question-section">
-                <label>Answers:</label>
-                <div class="answer-section" id="answersPanel">
-                    <input type="text" id="answer1TextBox" width="776">
-                    <input type="text" id="answer2TextBox" width="776">
-                </div>
-                <button id="AddAnswerButton" class="button">Add More Answers</button>
-                <button id="RemoveAnswerButton" class="button">Remove Answers</button>
-                <button id="SaveButton" class="button">Save and Exit</button>
+
+            <div class="card-body">
+                <form asp-action="SurveyCreator" method="post" id="surveyForm">
+                    <!-- Survey Metadata -->
+                    <div class="form-group">
+                        <label asp-for="Title">Survey Title</label>
+                        <input asp-for="Title" class="form-control" placeholder="Enter survey title">
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Description">Description</label>
+                        <textarea asp-for="Description" class="form-control" rows="3"
+                                  placeholder="Optional survey description"></textarea>
+                    </div>
+
+                    <!-- Questions Container -->
+                    <div id="questionsContainer">
+                        @for (int i = 0; i < Model.Questions.Count; i++)
+                        {
+                            <div class="question-section" data-question-index="@i">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="mb-0">Question @(i + 1)</h5>
+                                    <button type="button" class="btn btn-danger btn-sm remove-question">Remove</button>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Question Text</label>
+                                    <input asp-for="Questions[i].QuestionText" class="form-control"
+                                           placeholder="Enter question text">
+                                    <span asp-validation-for="Questions[i].QuestionText" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Question Type</label>
+                                    <select asp-for="Questions[i].QuestionType" class="form-control question-type">
+                                        <option value="MultipleChoice">Multiple Choice</option>
+                                        <option value="Text">Text Answer</option>
+                                    </select>
+                                </div>
+
+                                <!-- Multiple Choice Options -->
+                                <div class="options-section"
+                                     style="@(Model.Questions[i].QuestionType == "MultipleChoice" ? "" : "display:none;")">
+                                    @for (int j = 0; j < Model.Questions[i].Options.Count; j++)
+                                    {
+                                        <div class="option-input-group">
+                                            <input asp-for="Questions[i].Options[j]"
+                                                   class="form-control"
+                                                   placeholder="Option @(j + 1)">
+                                            @if (j >= 2)
+                                            {
+                                                <button type="button" class="btn btn-danger btn-sm remove-option">×</button>
+                                            }
+                                        </div>
+                                    }
+                                    <button type="button" class="btn btn-primary btn-sm add-option">Add Option</button>
+                                </div>
+
+                                <!-- This is CORRECT behavior (preview only) -->
+                                <div class="text-answer-section" style="display: none;">
+                                    <textarea class="form-control" rows="3"
+                                              placeholder="Respondents will see this text box"
+                                              disabled></textarea>
+                                </div>
+
+                                <input type="hidden" asp-for="Questions[i].OrderNumber" value="@(i + 1)">
+                            </div>
+                        }
+                    </div>
+
+                    <div class="mt-4 text-right">
+                        <!-- Changed to text-right -->
+                        <button type="button" id="addQuestion" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Add Question
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Survey
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+
     <script>
-        // JavaScript code for adding/removing answers and handling button clicks
-        // ... (You'll need to add this code)
+        $(function () {
+            // Add new question template
+            $('#addQuestion').click(function() {
+                const index = $('.question-section').length;
+                const template = `
+                    <div class="question-section" data-question-index="${index}">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">Question ${index + 1}</h5>
+                            <button type="button" class="btn btn-danger btn-sm remove-question">Remove</button>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Question Text</label>
+                            <input name="Questions[${index}].QuestionText"
+                                   class="form-control"
+                                   placeholder="Enter question text">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Question Type</label>
+                            <select name="Questions[${index}].QuestionType"
+                                    class="form-control question-type">
+                                <option value="MultipleChoice">Multiple Choice</option>
+                                <option value="Text">Text Answer</option>
+                            </select>
+                        </div>
+
+                        <div class="options-section" style="display: none;">
+                            <div class="option-input-group">
+                                <input name="Questions[${index}].Options[0]"
+                                       class="form-control"
+                                       placeholder="Option 1">
+                            </div>
+                            <div class="option-input-group">
+                                <input name="Questions[${index}].Options[1]"
+                                       class="form-control"
+                                       placeholder="Option 2">
+                            </div>
+                            <button type="button" class="btn btn-primary btn-sm add-option">Add Option</button>
+                        </div>
+
+                        <div class="text-answer-section" style="display: none;">
+                            <textarea class="form-control" rows="3"
+                                      placeholder="Text answer input (preview)"
+                                      disabled></textarea>
+                        </div>
+
+                        <input type="hidden" name="Questions[${index}].OrderNumber" value="${index + 1}">
+                    </div>`;
+
+                $('#questionsContainer').append(template);
+                updateValidation();
+            });
+
+            // Remove question
+            $(document).on('click', '.remove-question', function() {
+                $(this).closest('.question-section').remove();
+                updateQuestionNumbers();
+                updateValidation();
+            });
+
+            // Toggle options based on question type
+           $(document).on('change', '.question-type', function() {
+                const questionSection = $(this).closest('.question-section');
+                const isText = $(this).val() === 'Text';
+
+                questionSection.find('.options-section').toggle(!isText);
+                questionSection.find('.text-answer-section').toggle(isText);
+            });
+
+            // Add option
+            $(document).on('click', '.add-option', function() {
+                const optionsContainer = $(this).closest('.options-section');
+                const optionIndex = optionsContainer.find('.option-input-group').length;
+                const questionIndex = $(this).closest('.question-section').data('question-index');
+
+                const template = `
+                    <div class="option-input-group">
+                        <input name="Questions[${questionIndex}].Options[${optionIndex}]"
+                               class="form-control"
+                               placeholder="Option ${optionIndex + 1}">
+                        <button type="button" class="btn btn-danger btn-sm remove-option">×</button>
+                    </div>`;
+
+                $(this).before(template);
+            });
+
+            // Remove option
+            $(document).on('click', '.remove-option', function() {
+                $(this).closest('.option-input-group').remove();
+                $(this).closest('.options-section').find('.option-input-group input').each(function(index) {
+                    $(this).attr('placeholder', `Option ${index + 1}`);
+                });
+            });
+
+            // Update validation for dynamic content
+            function updateValidation() {
+                $('form').removeData('validator');
+                $('form').removeData('unobtrusiveValidation');
+                $.validator.unobtrusive.parse('form');
+            }
+
+            // Update question numbers
+            function updateQuestionNumbers() {
+                $('.question-section').each(function(index) {
+                    $(this).find('h5').text(`Question ${index + 1}`);
+                    $(this).find('[name$="OrderNumber"]').val(index + 1);
+                });
+            }
+        });
     </script>
 </body>
 </html>
